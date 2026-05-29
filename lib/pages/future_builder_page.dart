@@ -51,12 +51,16 @@ class _FutureBuilderPageState extends State<FutureBuilderPage> {
       body: FutureBuilder(
         future: usuariosFuture,
         builder: (BuildContext context, AsyncSnapshot snapshot) {
+          print("---------------------------------------------------");
           print("snapshot: $snapshot");
           print("Estado: ${snapshot.connectionState}");
           print("Has error: ${snapshot.hasError}");
           print("Erro: ${snapshot.error}");
           print("Has data: ${snapshot.hasData}");
           print("Data: ${snapshot.data}");
+          print("snapshot: $snapshot");
+          print("---------------------------------------------------");
+
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
