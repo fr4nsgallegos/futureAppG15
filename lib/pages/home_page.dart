@@ -1,7 +1,41 @@
 import 'package:flutter/material.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class HomePage extends StatefulWidget {
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  String mensaje = "Presiona el botón para cargar los datos";
+
+  bool cargando = false;
+
+  Future<String> cargarNombreUsuario() async {
+    await Future.delayed(Duration(seconds: 3));
+    // return "Jhonny Gallegos";
+    throw Exception("No se puede cargar al usuario");
+  }
+
+  Future<void> obtenerUsuario() async {
+    setState(() {
+      cargando = true;
+      mensaje = "cargando usuario";
+    });
+
+    try {
+      final nombre = await cargarNombreUsuario();
+
+      setState(() {
+        mensaje = "Usuario cargado: $nombre";
+        cargando = false;
+      });
+    } catch (error) {
+      setState(() {
+        mensaje = "error: No se pudo cargar al usuario";
+        cargando = false;
+      });
+    }
+  }
 
   Future<String> obtenerNombre() async {
     print("Obteniendo nombre");
@@ -41,8 +75,11 @@ class HomePage extends StatelessWidget {
           try {
             final int resultado = await dividir(10, 0);
             print("el resultado de la división es: $resultado");
-          } catch (e) {
-            print("Hubo un error: $e");
+          } catch (e, stack) {
+            print("Hubo un error: $e"); //es el error
+            print(
+              "Stack: $stack",
+            ); //me ayuda a encontrar dónde ha ocurrido el error
           }
 
           // ----------------------------------------------------------------------------------
@@ -72,6 +109,32 @@ class HomePage extends StatelessWidget {
           // String nombre = await obtenerNombre();
           // print(nombre);
         },
+      ),
+      appBar: AppBar(title: Text("Programación Asíncrona")),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (cargando == true)
+                CircularProgressIndicator()
+              else
+                Icon(Icons.person, size: 80, color: Colors.blue),
+              SizedBox(height: 24),
+              Text(
+                mensaje,
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 32),
+              ElevatedButton(
+                onPressed: cargando == true ? null : obtenerUsuario,
+                child: Text("Cargar usuario"),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
