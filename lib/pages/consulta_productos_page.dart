@@ -45,6 +45,17 @@ class _ConsultaProductosPageState extends State<ConsultaProductosPage> {
     }
   }
 
+  Future<List<ProductModel>> obtenerProductosBaratos() async {
+    await Future.delayed(Duration(seconds: 2));
+    final productos = [
+      ProductModel(nombre: "Laptop", precio: 2500.00, stock: 5),
+      ProductModel(nombre: "Mouse", precio: 80.5, stock: 15),
+      ProductModel(nombre: "Teclado", precio: 105.00, stock: 8),
+      ProductModel(nombre: "Monitor Gamingn", precio: 720, stock: 3),
+    ];
+    return productos.where((producto) => producto.precio < 500).toList();
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -57,6 +68,14 @@ class _ConsultaProductosPageState extends State<ConsultaProductosPage> {
     return Scaffold(
       appBar: AppBar(
         actions: [
+          IconButton(
+            onPressed: () {
+              setState(() {
+                productsFuture = obtenerProductosBaratos();
+              });
+            },
+            icon: Icon(Icons.price_check),
+          ),
           IconButton(
             onPressed: () {
               recargarProductos();
